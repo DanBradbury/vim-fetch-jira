@@ -2,7 +2,7 @@ inoremap <F6> <C-R>=FindUnresolved()<CR>
 
 " Search your Assigned & Unresolved Issues and get relevant information
 function! FindUnresolved()
-autocmd CompleteDone * pclose | execute("%s/\r/\r&/g") | execute("%s/\r/\r/g") | execute "%s/\n//g" | execute "normal" "gg\<Esc>"
+autocmd CompleteDone * pclose | execute("%s/\r/\r&/ge") | execute("%s/\r//ge") | execute "%s/\n//ge" | execute "normal" "gg\<Esc>"
 
 python << EOF
 import vim
