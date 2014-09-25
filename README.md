@@ -2,16 +2,13 @@
 
 `fetch-jira` is a Vim plugin that queries JIRA issues and finds relevant information on each
 
-## Demo
-
-![](fetch-jira.gif)
-
 ## How to use
 Get infomation on your Unresolved Issues
+![](jira-description.gif)
   - \<F6\> in insert mode.
 
-*TODO: Implement this based off mnpks jira-complete*
 Insert Jira ticket summary for git commit message
+![](jira-message.gif)
   - \<F7> in insert mode
 
 ## Installation
