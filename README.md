@@ -7,7 +7,12 @@
 ![](fetch-jira.gif)
 
 ## How to use
-\<F6\> in insert mode.
+Get infomation on your Unresolved Issues
+  - \<F6\> in insert mode.
+
+*TODO: Implement this based off mnpks jira-complete*
+Insert Jira ticket summary for git commit message
+  - \<F7> in insert mode
 
 ## Installation
 ```
@@ -31,4 +36,4 @@ let g:jiracomplete_username = 'your_jira_username'
 let g:jiracomplete_password = 'your_jira_password'  " optional
 ```
 
-Special thanks to @mnpk for writing the jira-complete plugin that inspired this.
+Special thanks to @mnpk for writing the [jira-complete](https://github.com/mnpk/vim-jira-complete) plugin that inspired this.

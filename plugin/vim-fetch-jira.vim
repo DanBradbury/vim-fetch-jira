@@ -1,8 +1,9 @@
 inoremap <F6> <C-R>=FindUnresolved()<CR>
 
+" Search your Assigned & Unresolved Issues and get relevant information
 function! FindUnresolved()
 autocmd CompleteDone * pclose | execute("%s/\r/\r&/g") | execute("%s/\r/\r/g") | execute "%s/\n//g" | execute "normal" "gg\<Esc>"
-"set previewheight=999
+
 python << EOF
 import vim
 import json
@@ -31,13 +32,13 @@ def get_unresolved():
             if issue['fields']['description']:
                 time_estimate = str(issue['fields']['aggregatetimeoriginalestimate'])
                 time_spent = str(issue['fields']['timespent'])
+                summary = issue['key']+": "+issue['fields']['summary']+"\nORIGINAL ESTIMATE: "+time_estimate+"\nTIME SPENT: "+time_spent+"\n"
                 if time_estimate != 'None':
                     time_estimate = str(float(time_estimate)/28800.0)
                 if time_spent != 'None':
                     time_spent = str(float(time_spent)/28800.0)
                 des = issue['fields']['description'].encode('ascii', 'replace')
-                description = des.replace("\"", "").replace("^M","\n")
-                #description = ['Description\nStuff', "doing things"]
+                description = summary+des.replace("\"", "").replace("^M","\n")
                 match.append('{"word": "%s", "abbr":"%s", "info":"%s"}' %
                 (description, issue['key'], issue['key']+": "+issue['fields']['summary']+"\nORIGINAL ESTIMATE: "+time_estimate+"\nTIME SPENT: "+time_spent))
         command = 'call complete(col("."), [' + ",".join(match) + '])'
