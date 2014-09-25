@@ -38,7 +38,7 @@ def get_unresolved():
                     time_spent = str(float(time_spent)/28800.0)
                 summary = issue['key']+": "+issue['fields']['summary']+"\rORIGINAL ESTIMATE: "+time_estimate+"\rTIME SPENT: "+time_spent+"\r"
                 des = issue['fields']['description'].encode('ascii', 'replace')
-                description = summary+des.replace("\"", "").replace("^M","")
+                description = summary+des.replace("\"", "")
                 match.append('{"word": "%s", "abbr":"%s", "info":"%s"}' %
                 (description, issue['key'], issue['key']+": "+issue['fields']['summary']+"\nORIGINAL ESTIMATE: "+time_estimate+"\nTIME SPENT: "+time_spent))
         command = 'call complete(col("."), [' + ",".join(match) + '])'
