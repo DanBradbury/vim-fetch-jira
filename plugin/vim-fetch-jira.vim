@@ -1,4 +1,49 @@
 inoremap <F6> <C-R>=FindUnresolved()<CR>
+inoremap <F7> <C-R>=InsertCommitMessage()<CR>
+
+function! InsertCommitMessage()
+let contents=get(readfile('.git/HEAD'),0, '')
+python << EOF
+import vim
+import json
+import requests
+import base64
+import re
+
+def filter_branch():
+  branch = vim.eval("contents")
+  branch = branch.replace("refs/heads/", "").replace("ref: ", "")
+  splits = branch.split("/")
+  #vim.command("echo '"+splits[0]+"'")
+
+  url = vim.eval("g:jiracomplete_url")
+  user = vim.eval("g:jiracomplete_username")
+  pw = vim.eval("g:jiracomplete_auth")
+  auth = base64.b64encode(user+':'+pw)
+
+  query = "jql=assignee=%s+and+resolution=unresolved" % user
+  api_url = "%s/rest/api/2/search?%s" % (url, query)
+  headers = {}
+  if auth:
+      headers['authorization'] = 'Basic ' + auth
+  response = requests.get(api_url, headers=headers)
+  if response.status_code == requests.codes.ok:
+      jvalue = json.loads(response.content)
+      issues = jvalue['issues']
+      match = []
+      for issue in issues:
+          if issue['fields']['description']:
+              summary = issue['key']+" "+issue['fields']['summary']+" : "
+              match.append('{"word": "%s", "abbr":"%s"}' %
+              (splits[0]+" "+summary, issue['key']))
+      command = 'call complete(col("."), [' + ",".join(match) + '])'
+      vim.command(command)
+  else:
+      vim.command("return \" Error: " + response.reason + "\"")
+EOF
+py filter_branch()
+return ''
+endfunction
 
 " Search your Assigned & Unresolved Issues and get relevant information
 function! FindUnresolved()
@@ -44,19 +89,6 @@ def get_unresolved():
                 (description, issue['key'], issue['key']+": "+issue['fields']['summary']+"\nORIGINAL ESTIMATE: "+time_estimate+"\nTIME SPENT: "+time_spent))
         command = 'call complete(col("."), [' + ",".join(match) + '])'
         vim.command(command)
-    elif (response.status_code == requests.codes.unauthorized or
-            response.status_code == requests.codes.bad_request or
-            response.status_code == requests.codes.forbidden):
-        vim.command("echohl ErrorMsg")
-        vim.command("call inputsave()")
-        message = response.reason + "! Please input jira password for " + user
-        vim.command("let password = input('"+message+": ')")
-        vim.command('call inputrestore()')
-        vim.command("echohl None")
-        pw = vim.eval('password')
-        auth = base64.b64encode(user+':'+pw)
-        vim.command("let b:jiracomplete_auth = '"+auth+"'")
-        jira_complete()
     else:
         vim.command("return \" Error: " + response.reason + "\"")
 EOF
