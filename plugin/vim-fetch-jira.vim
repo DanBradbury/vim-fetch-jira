@@ -14,7 +14,7 @@ import re
 def get_unresolved():
     url = vim.eval("g:jiracomplete_url")
     user = vim.eval("g:jiracomplete_username")
-    pw = vim.eval("b:jiracomplete_auth")
+    pw = vim.eval("g:jiracomplete_auth")
     auth = base64.b64encode(user+':'+pw)
 
     query = "jql=assignee=%s+and+resolution=unresolved" % user
@@ -38,7 +38,7 @@ def get_unresolved():
                 if time_spent != 'None':
                     time_spent = str(float(time_spent)/28800.0)
                 des = issue['fields']['description'].encode('ascii', 'replace')
-                description = summary+des.replace("\"", "").replace("^M","\n")
+                description = summary+des.replace("\"", "").replace("^M","")
                 match.append('{"word": "%s", "abbr":"%s", "info":"%s"}' %
                 (description, issue['key'], issue['key']+": "+issue['fields']['summary']+"\nORIGINAL ESTIMATE: "+time_estimate+"\nTIME SPENT: "+time_spent))
         command = 'call complete(col("."), [' + ",".join(match) + '])'
