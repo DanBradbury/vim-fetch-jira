@@ -34,6 +34,7 @@ def filter_branch():
       for issue in issues:
           if issue['fields']['description']:
               summary = issue['key']+" "+issue['fields']['summary']+" : "
+              summary = summary.replace("\"", "")
               match.append('{"word": "%s", "abbr":"%s"}' %
               (splits[0]+" "+summary, issue['key']))
       command = 'call complete(col("."), [' + ",".join(match) + '])'
@@ -83,10 +84,11 @@ def get_unresolved():
                     time_spent = str(float(time_spent)/28800.0)
                 link = "JIRA link: https://ringrevenue.atlassian.net/browse/"+issue['key']+"\r\r\r"
                 summary = issue['key']+": "+issue['fields']['summary']+"\rORIGINAL ESTIMATE: "+time_estimate+"\rTIME SPENT: "+time_spent+"\r"
+                summary = summary.replace("\"", "")
                 des = issue['fields']['description'].encode('ascii', 'replace')
-                description = link+summary+des.replace("\"", "")
+                description = link+summary+des.replace("\"", "").replace("\'","")
                 match.append('{"word": "%s", "abbr":"%s", "info":"%s"}' %
-                (description, issue['key'], issue['key']+": "+issue['fields']['summary']+"\nORIGINAL ESTIMATE: "+time_estimate+"\nTIME SPENT: "+time_spent))
+                (description, issue['key'], summary))
         command = 'call complete(col("."), [' + ",".join(match) + '])'
         vim.command(command)
     else:
