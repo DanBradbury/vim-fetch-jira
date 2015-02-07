@@ -1,0 +1,12 @@
+Execute (Ensure that jiracomplete vars are correctly set):
+  AssertEqual "https://ringrevenue.atlassian.net", g:jiracomplete_url
+  AssertEqual "dbradbury", g:jiracomplete_username
+  let g:jiracomplete_auth=$JIRA_PASS
+  AssertEqual $JIRA_PASS, g:jiracomplete_auth
+
+Do (generate team report):
+  i\<F8>
+
+Expect (Get some sort of report):
+  Some information
+

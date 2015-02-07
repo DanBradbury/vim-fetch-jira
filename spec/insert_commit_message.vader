@@ -1,0 +1,21 @@
+Execute (Set a bad password):
+  let g:jiracomplete_auth="ss"
+
+Do (insert commit message):
+  i\<F7>
+
+Expect (some error):
+  Error: Unauthorized
+
+Execute (Ensure that config is correct):
+  AssertEqual "https://ringrevenue.atlassian.net", g:jiracomplete_url
+  AssertEqual "dbradbury", g:jiracomplete_username
+  let g:jiracomplete_auth=$JIRA_PASS
+  AssertEqual $JIRA_PASS, g:jiracomplete_auth
+
+Do (insert commit message):
+  i\<F7>
+
+Expect (none):
+  master WEB-1126 Inviting a direct advertiser user fails : 
+
