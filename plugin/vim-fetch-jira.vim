@@ -33,7 +33,7 @@ def generate_report():
     match = []
     for issue in issues:
       time_estimate = str(issue['fields']['aggregatetimeoriginalestimate'])
-      time_spent = str(issue['fields']['timespent'])
+      time_spent = str(issue['fields']['aggregatetimespent'])
       if time_estimate != 'None':
           time_estimate = str(float(time_estimate)/28800.0)
       if time_spent != 'None':
