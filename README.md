@@ -35,7 +35,7 @@ in your .vimrc,
 ```
 let g:jiracomplete_url = 'http://your.jira.url/'
 let g:jiracomplete_username = 'your_jira_username'
-let g:jiracomplete_password = 'your_jira_password'  " optional
+let g:jiracomplete_auth = 'your_jira_password'  " optional. You will be prompt if not supplied
 let g:jira_team_name = 'your_team_name' "label used for the team
 let g:jira_current_sprint = 'sprint_num' "integer value of sprint#
 ```
